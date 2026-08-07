@@ -1,0 +1,16 @@
+site_name: რიცხვითი მეთოდები
+site_description: საკურსო მასალები
+
+theme:
+  name: material
+  logo: logo.png
+  favicon: logo.png  # also sets the browser tab icon
+  palette:
+    primary: deep purple
+    accent: deep purple
+  features:
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+
+# No 'nav' section = single page, auto-generated
