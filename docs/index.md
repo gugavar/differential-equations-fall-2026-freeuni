@@ -22,6 +22,10 @@
   - გვერდები 35–36, ნომრები: 2, 4, 5, 6, 8, 10, 12, 16, 20, 22;
   - გვერდები 43–44, ნომრები: 2, 4, 6, 7, 8, 12, 14, 18.
 
+
+- 💾 [MATLAB 2019 საინსტალაციო (Windows)](https://drive.google.com/file/d/1dVhMLdxqHvkRvzzD3VJR2MYY2AdcDAlC/view?usp=drive_link)
+- 💾 [MATLAB 2022 საინსტალაციო (MAC)](https://drive.google.com/drive/folders/1Jow0DC3t_jL1GP6EQpHDBu543sUEiRK1?usp=sharing)
+
 **MATLAB ინსტალაციისას:**
 
 არ უნდა იყოს მონიშნული: 
