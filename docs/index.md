@@ -1,46 +1,28 @@
-# რიცხვითი მეთოდები
 
 ## რესურსები
 
-- 📘 [Applied Numerical Methods with MATLAB – Chapra](https://drive.google.com/file/d/1otjKOcMXh-oYeTUCk5fCTwpa40JQrOaH/view?usp=drive_link)
-- 📋 [სილაბუსი](https://drive.google.com/file/d/1UlVwUw_qKFy70QX-SROH74QPwGdbekMu/view?usp=drive_link)
-- 💾 [MATLAB 2019 საინსტალაციო (Windows)](https://drive.google.com/file/d/1dVhMLdxqHvkRvzzD3VJR2MYY2AdcDAlC/view?usp=drive_link)
-- 💾 [MATLAB 2022 საინსტალაციო (MAC)](https://drive.google.com/drive/folders/1Jow0DC3t_jL1GP6EQpHDBu543sUEiRK1?usp=sharing)
+- 📚 წიგნები:
+  - [Fundamentals of Differential Equations and Boundary Value Problems — Nagle, Saff, Snider](https://drive.google.com/file/d/1AX-QjsPPABmDMrf4ZEogNRkWTxYo14f8/view?usp=share_link)
+  - [Elementary Differential Equations and Boundary Value Problems — Boyce, DiPrima](https://drive.google.com/file/d/1fyQPTzGrD63WfCWoiJv1KeiekJI_K8a6/view?usp=share_link)
+  - [Elementary Differential Equations with Boundary Value Problems — Edwards, Penney](https://drive.google.com/file/d/1whtP67nlNx3lp32u0nsnDaUxuKSv80pb/view?usp=share_link)
+- 📄 [სილაბუსი](https://docs.google.com/document/d/1-iN1eAxiJ-IGniliN9Dq3ZKfRIjIicwr/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=sharing)
+- 🧪 [MIT Mathlets](https://mathlets.org/mathlets/)
+- 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
+- 📚 [წინა წლის ფინალური გამოცდა](https://drive.google.com/file/d/1vRMJkgkaoF9rCRFj45KvKSwYnbCps2mo/view?usp=drive_link)
+- 📚 კიდევ ორი ფინალური წინა წლებიდან: [1](https://docs.google.com/document/d/1czmmmV0TaFST9fu_dyjcjoRcKqsgyPI5/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link); [2](https://docs.google.com/document/d/1lpA_uIRW-LIKAQ_0Lp-2QKCZJL3xnVfN/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link);
 
 ---
-
-## ლექციები
----
-### ლექცია 4 5hh5— ღია მეთოდები: იტერაციული და ნიუტონის მეთოდები
-
-* 🖼️ [სქრინი](https://drive.google.com/file/d/1I--0Mz4gheoB0ltHw4I_wYT3QYbeeXDn/view?usp=drive_link)
-* 🧮 ფაილები: [rootfinding_2](https://drive.google.com/file/d/1VFZQO6E7tu7AWM7pBZGG6DbdtQncKOuz/view?usp=drive_link); [newtraph](https://drive.google.com/file/d/1xfkiZ-vu0uM0nzMPn525YNVLgYNxE7y-/view?usp=drive_link); [secant](https://drive.google.com/file/d/1RRvysYxtmgDaTV18z3yPtD0MV9Jh13dU/view?usp=drive_link);
-* 📝 დავალება: მე-6 თავის ამოცანები: 6.1, 6.2, 6.3 a, b, c, e, 6.4 a, b, c, 6.5 a, 6.6, 6.7, 6.9;
-
----    
-
-### ლექცია 3 — ფესვის პოვნა: გრაფიკული და შუაკვეთის მეთოდები
-
-- 🖥️ [შუაკვეთის მეთოდის დემონსტრაცია](files/shuakvetis_metodi_exact_preview.html)
-- 🧮 ფაილები: [rootfinding](https://drive.google.com/file/d/1pTp3RU34JcJ6-6ayML2Du8P6kHVlTEKi/view?usp=drive_link); [bisect](https://drive.google.com/file/d/1yIs7z1FJ_bcinr18OedJDBKCoI6AcM7N/view?usp=drive_link); [incsearch](https://drive.google.com/file/d/1rEfJBAeQEAKM5YmpBms5vDYISQhfOWy9/view?usp=drive_link);
-- 📝 დავალება: მე-5 თავის ამოცანები: 5.1, 5.3, 5.4, 5.7 a, b, 5.8, 5,15, 5.20, 5.22;  
-
-
 ---
 
-### ლექცია 2 — საბაზისო ბრძანებები და გამოთვლები MATLAB-ში ფუნქციები და ციკლები.
+### ლექცია 1/2 — დიფერენციალური განტოლებებით მოდელირების მაგალითები, საწყის პირობებიანი ამოცანები და მიმართულებითი ველები
 
-- 📝 დავალება: წიგნიდან წაიკითხეთ თავები 2 და 3. ამოხსენით [ამოცანები](https://drive.google.com/file/d/1HDCI86xZSdvGN8-fHk4lw3qQvzKINIP0/view?usp=drive_link)
-
----
-
-### ლექცია 1 — მათემატიკური და რიცხვითი მოდელები
-
-დღევანდელი ლექციის რესურსები:  
-- 🧮 [კოდი](https://drive.google.com/file/d/1X5i7ivV7Zn_vrpzlRm8h45miP7cNUHqc/view?usp=drive_link)  
-- 📄 [სლაიდები](https://drive.google.com/file/d/1j9wVRbRufsP7wv05XDQMG5ZNNCIyfXrj/view?usp=drive_link)  
-- 🌐 [ოილერის მეთოდის დემო](https://mathlets.org/mathlets/eulers-method/)  
-- 📝 დავალება: [ამოცანები](https://drive.google.com/file/d/1wbvPo7_sycIS6EzISBqtaltcdjARc5eE/view?usp=drive_link)
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1a6XQ_JKUEvsB845WWAEHCkmAESkXmKZY/view?usp=drive_link)
+- 📊 [სლაიდები](https://drive.google.com/file/d/1-oQPhU4RgXeO4CouwVozvsjcJTRmcZlR/view?usp=drive_link)
+- 🧪 [მიმართულებითი ველების დასახატი საიტი](https://homepages.bluffton.edu/~nesterd/apps/slopefields.html)
+- 🧪 [ოილერის მეთოდის დემო](https://mathlets.org/mathlets/eulers-method/)
+- 📝 დავალება: წიგნიდან [1]:
+  - გვერდები 35–36, ნომრები: 2, 4, 5, 6, 8, 10, 12, 16, 20, 22;
+  - გვერდები 43–44, ნომრები: 2, 4, 6, 7, 8, 12, 14, 18.
 
 **MATLAB ინსტალაციისას:**
 
