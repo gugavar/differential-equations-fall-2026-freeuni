@@ -7,11 +7,9 @@
   - [Elementary Differential Equations with Boundary Value Problems — Edwards, Penney](https://drive.google.com/file/d/1whtP67nlNx3lp32u0nsnDaUxuKSv80pb/view?usp=share_link)
 - 📄 [სილაბუსი](https://docs.google.com/document/d/1-iN1eAxiJ-IGniliN9Dq3ZKfRIjIicwr/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=sharing)
 - 🧪 [MIT Mathlets](https://mathlets.org/mathlets/)
-- 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
-- 📚 [წინა წლის ფინალური გამოცდა](https://drive.google.com/file/d/1vRMJkgkaoF9rCRFj45KvKSwYnbCps2mo/view?usp=drive_link)
-- 📚 კიდევ ორი ფინალური წინა წლებიდან: [1](https://docs.google.com/document/d/1czmmmV0TaFST9fu_dyjcjoRcKqsgyPI5/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link); [2](https://docs.google.com/document/d/1lpA_uIRW-LIKAQ_0Lp-2QKCZJL3xnVfN/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link);
 
----
+- 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
+
 ---
 
 ### ლექცია 1/2 — დიფერენციალური განტოლებებით მოდელირების მაგალითები, საწყის პირობებიანი ამოცანები და მიმართულებითი ველები
