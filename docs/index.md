@@ -13,7 +13,7 @@
 ---
 ### ლექცია 3/4 — განცალებად-ცვლადიანი და პირველი რიგის წრფივი დიფერენციალური განტოლებები
 
-- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1GuEQtD5s6K2NHvflD7EJjA-9onWyORn3/view?usp=drive_link)
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1RiHmfXTolRWQUL3swbmHbrSol34eGqYR/view?usp=drive_link)
 - 📊 [სლაიდები](https://drive.google.com/file/d/1W8_E1q13oxpIycH6MH0kFEidxCNSIxXh/view?usp=share_link)
 - 📝 დავალება: წიგნიდან [1] წაიკითხეთ თავები 2.1–2.3 და ამოხსენით:
   - განცალებად-ცვლადიანი განტოლებები: გვერდები 68–69, ნომრები: 1, 2, 3, 4, 7, 9, 11, 12, 15, 17, 20, 21, 25, 33, 35;
