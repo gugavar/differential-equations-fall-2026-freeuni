@@ -11,7 +11,14 @@
 - 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
 
 ---
+### ლექცია 3/4 — განცალებად-ცვლადიანი და პირველი რიგის წრფივი დიფერენციალური განტოლებები
 
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1GuEQtD5s6K2NHvflD7EJjA-9onWyORn3/view?usp=drive_link)
+- 📊 [სლაიდები](https://drive.google.com/file/d/1W8_E1q13oxpIycH6MH0kFEidxCNSIxXh/view?usp=share_link)
+- 📝 დავალება: წიგნიდან [1] წაიკითხეთ თავები 2.1–2.3 და ამოხსენით:
+  - განცალებად-ცვლადიანი განტოლებები: გვერდები 68–69, ნომრები: 1, 2, 3, 4, 7, 9, 11, 12, 15, 17, 20, 21, 25, 33, 35;
+  - პირველი რიგის წრფივი დიფერენციალური განტოლებები: გვერდები 76–78, ნომრები: 7, 8, 11, 16, 19, 28, 30, 35, 36, 37.
+  
 ### ლექცია 1/2 — დიფერენციალური განტოლებებით მოდელირების მაგალითები, საწყის პირობებიანი ამოცანები და მიმართულებითი ველები
 
 - 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1a6XQ_JKUEvsB845WWAEHCkmAESkXmKZY/view?usp=drive_link)
