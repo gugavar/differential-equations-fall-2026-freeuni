@@ -11,6 +11,14 @@
 - 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
 
 ---
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1by5h5R3O1M9RNhawCS7l_iLwnmAp1R4q/view?usp=drive_link)
+- 🧪 [მასა-ზამბარის სიმულაცია](https://gugavar.github.io/rand_resourses/single_mass_second_order_ode_demo_offline.html)
+- 🧪 [მასა-ზამბარის სისტემა სინუსოიდური ინფუთით](https://mathlets.org/mathlets/amplitude-and-phase-2nd-order/)
+- 📝 დავალება: წიგნიდან [1] წაიკითხეთ თავები 4.1–4.2 და ამოხსენით:
+  - მასა-ზამბარის სისტემები და რხევები: თავი 4.1, გვერდები 178–179: 2, 3, 4, 5, 6, 7, 9;
+  - მე-2 რიგის წრფივი ერთგვაროვანი განტოლებები: თავი 4.2, გვერდები 186–187: 3, 7, 9, 11, 17, 19, 20, 21, 23, 26, 29, 37, 39, 44.
+- 📚 წინა წლების შუალედურები: [1](https://docs.google.com/document/d/1ZPvaXrymc65vyl_XfRTU0vyo4YHkpGnD/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link); [2](https://docs.google.com/document/d/1vV61v9lgegidfYfLR2vxvVOHpkED159_/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link);
+
 ### ლექცია 7/8 — კომპლექსური რიცხვები, გათბობა-გაგრილების სისტემები
 
 - 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1m8AQ2lVvf6XVSRJqP0aFgvWHjeygXZ5u/view?usp=drive_link)
