@@ -11,6 +11,17 @@
 - 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
 
 ---
+- 📚 კიდევ ორი წინა წლების შუალედური: [3](https://docs.google.com/document/d/1tw8goBdEvq9xFfr3jwOijWrNo25lADU-/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link); [4](https://docs.google.com/document/d/1PlEk_RifWf2qKjWHi5XMfWSvWNjfFH13/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link);
+
+### ლექცია 11/12 — განმეორებადი და კომპლექსური ფესვების შემთხვევა და არა-ერთგვაროვანი განტოლებები
+
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1VP4ndN5E7MeFhsBjbHxsz7LubF3wPzES/view?usp=drive_link)
+- 📝 დავალება: წიგნიდან [1] წაიკითხეთ თავები 4.3–4.5 და ამოხსენით:
+  - მახასიათებელი განტოლების კომპლექსური ფესვების შემთხვევა: თავი 4.3, გვერდები 194–195: 9, 11, 17, 19, 23, 32, 34, 35;
+  - განუსაზღვრელი კოეფიციენტების მეთოდი და სუპერპოზიციის პრინციპი: თავები 4.4–4.5, გვერდი 202: 1, 3, 5, 7, 9, 11, 13, 15, 17, 21, 25; გვერდები 207–208: 1, 2, 3, 5, 19, 21, 23, 43, 44, 45.
+
+### ლექცია 9/10 — მეორე რიგის დიფერენციალური განტოლებები და რეალური ფესვების შემთხვევა
+
 - 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1by5h5R3O1M9RNhawCS7l_iLwnmAp1R4q/view?usp=drive_link)
 - 🧪 [მასა-ზამბარის სიმულაცია](https://gugavar.github.io/rand_resourses/single_mass_second_order_ode_demo_offline.html)
 - 🧪 [მასა-ზამბარის სისტემა სინუსოიდური ინფუთით](https://mathlets.org/mathlets/amplitude-and-phase-2nd-order/)
