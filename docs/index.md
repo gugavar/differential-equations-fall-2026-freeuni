@@ -11,6 +11,13 @@
 - 📚 [ფინალური გამოცდა](https://docs.google.com/document/d/1Kjx_Z24V12TaFEiiFi8YF6YbRBYTKSX3/edit?ouid=115006867327811336984&rtpof=true&sd=true&usp=drive_link)
 
 ---
+### ლექცია 13/14 — პარამეტრების ვარიაცია და მეორე რიგის სისტემები: სიხშირული, ამპლიტუდური და ფაზური მახასიათებლები
+
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1hpKBIKsDbiSStd9YLZ9wz9LHCnjfRKiW/view?usp=drive_link)
+- 📝 დავალება: წიგნიდან [1] წაიკითხეთ თავი 4.6 და ამოხსენით:
+  - პარამეტრების ვარიაცია: თავი 4.6, გვერდები 213–214, ნომრები: 1, 4, 7, 11, 20, 22, 23, 24, 25.
+- 📚 კიდევ ორი წინა წლების შუალედური: [3](https://docs.google.com/document/d/1tw8goBdEvq9xFfr3jwOijWrNo25lADU-/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link); [4](https://docs.google.com/document/d/1PlEk_RifWf2qKjWHi5XMfWSvWNjfFH13/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link);
+
 - 📚 კიდევ ორი წინა წლების შუალედური: [3](https://docs.google.com/document/d/1tw8goBdEvq9xFfr3jwOijWrNo25lADU-/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link); [4](https://docs.google.com/document/d/1PlEk_RifWf2qKjWHi5XMfWSvWNjfFH13/edit?ouid=110148669605332798451&rtpof=true&sd=true&usp=drive_link);
 
 ### ლექცია 11/12 — განმეორებადი და კომპლექსური ფესვების შემთხვევა და არა-ერთგვაროვანი განტოლებები
