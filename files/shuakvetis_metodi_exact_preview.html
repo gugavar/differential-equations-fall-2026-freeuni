@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>შუაკვეთის მეთოდი — ფესვის პოვნა</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17; --surface: #111827; --panel: #161e2e; --border: #1f2d42;
+    --accent: #f59e0b; --accent2: #ef4444; --accent3: #22c55e; --text: #e2e8f0;
+    --muted: #64748b; --mid: #fbbf24;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Space Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px; pointer-events: none; z-index: 0;
+  }
+  .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
+  header { text-align: center; margin-bottom: 40px; }
+  header h1 { font-family: 'Fraunces', serif; font-size: clamp(2rem,5vw,3.5rem); font-weight: 300; letter-spacing: -1px; color: #fff; }
+  header h1 em { font-style: italic; color: #f59e0b; }
+  header p { color: var(--muted); font-size: 0.8rem; margin-top: 8px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+  @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+
+  .canvas-wrap {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; position: relative; user-select: none;
+  }
+  canvas { display: block; width: 100%; height: 400px; cursor: crosshair; }
+  canvas.panning { cursor: grab; }
+  canvas.panning:active { cursor: grabbing; }
+  .canvas-label {
+    position: absolute; top: 14px; left: 16px; font-size: 0.65rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); background: var(--surface);
+    padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border);
+  }
+  .zoom-controls {
+    position: absolute; top: 14px; right: 16px;
+    display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end;
+    max-width: 46%;
+  }
+  .zoom-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    font-family: 'Space Mono', monospace; font-size: 0.72rem;
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .zoom-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .zoom-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.1); }
+  .zoom-hint {
+    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+    font-size: 0.6rem; color: var(--muted); background: rgba(10,14,23,0.8);
+    padding: 3px 10px; border-radius: 4px; pointer-events: none; opacity: 0;
+    transition: opacity 0.3s; white-space: nowrap;
+  }
+  .zoom-hint.show { opacity: 1; }
+
+  .panel { display: flex; flex-direction: column; gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px; overflow: hidden; }
+  .card-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: #f59e0b; margin-bottom: 14px; }
+
+  .func-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .func-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted);
+    font-family: 'Space Mono', monospace; font-size: 0.75rem; padding: 6px 12px;
+    border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .func-btn:hover, .func-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,229,255,0.06); }
+  .func-btn.custom-active { border-color: var(--mid); color: var(--mid); background: rgba(251,191,36,0.06); }
+
+  .custom-fn-wrap { margin-top: 12px; display: none; flex-direction: column; gap: 8px; }
+  .custom-fn-wrap.visible { display: flex; }
+  .custom-fn-row { display: flex; gap: 8px; align-items: center; }
+  .custom-fn-label { font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+  .custom-fn-input {
+    flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--mid);
+    color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.82rem;
+    padding: 7px 10px; border-radius: 6px; outline: none;
+  }
+  .custom-fn-input:focus { border-color: var(--accent); }
+  .custom-fn-apply {
+    background: rgba(251,191,36,0.12); border: 1px solid var(--mid); color: var(--mid);
+    font-family: 'Space Mono', monospace; font-size: 0.72rem; padding: 7px 12px;
+    border-radius: 6px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .custom-fn-apply:hover { background: rgba(251,191,36,0.22); }
+  .fn-parse-err { font-size: 0.68rem; color: var(--accent2); display: none; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .field label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.05em; }
+  .field input {
+    width: 100%; min-width: 0; background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    font-family: 'Space Mono', monospace; font-size: 0.82rem; padding: 8px 10px;
+    border-radius: 6px; outline: none; transition: border-color 0.2s;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .fields-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; align-items: start; }
+
+  .btn-row { display: flex; gap: 10px; }
+  .btn { flex: 1; font-family: 'Space Mono', monospace; font-size: 0.78rem; padding: 10px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.18s; font-weight: 700; letter-spacing: 0.03em; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); }
+  .btn-step { background: rgba(163,230,53,0.1); border: 1px solid var(--accent3); color: var(--accent3); }
+  .btn-step:hover { background: rgba(163,230,53,0.2); }
+
+  .iter-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .stat-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .stat-value { font-size: 1rem; font-weight: 700; word-break: break-word; }
+  .stat-value.cyan { color: var(--accent); } .stat-value.red { color: var(--accent2); }
+  .stat-value.green { color: var(--accent3); } .stat-value.yellow { color: var(--mid); }
+
+  .table-wrap { max-height: 220px; overflow-y: auto; border-radius: 8px; border: 1px solid var(--border); }
+  .table-wrap::-webkit-scrollbar { width: 4px; }
+  .table-wrap::-webkit-scrollbar-track { background: var(--surface); }
+  .table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+  thead { position: sticky; top: 0; background: var(--panel); z-index: 2; }
+  th { padding: 8px 10px; text-align: left; color: var(--muted); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 1px solid var(--border); font-size: 0.62rem; }
+  td { padding: 6px 10px; border-bottom: 1px solid rgba(31,45,66,0.5); }
+  tr:last-child td { border-bottom: none; }
+  tr.highlight td { background: rgba(0,229,255,0.05); }
+  tr.converged td { background: rgba(163,230,53,0.06); }
+  .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 0.6rem; }
+  .tag-pos { background: rgba(163,230,53,0.15); color: var(--accent3); }
+  .tag-neg { background: rgba(255,77,109,0.15); color: var(--accent2); }
+
+  .steps-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .step-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.72rem; color: var(--muted); transition: color 0.3s; }
+  .step-item.active { color: var(--text); }
+  .step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; flex-shrink: 0; color: var(--muted); transition: all 0.3s; }
+  .step-item.active .step-num { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 700; }
+
+  .error-msg { color: var(--accent2); font-size: 0.72rem; padding: 8px 12px; background: rgba(255,77,109,0.08); border: 1px solid rgba(255,77,109,0.2); border-radius: 6px; display: none; }
+  .convergence-msg { color: var(--accent3); font-size: 0.72rem; padding: 8px 12px; background: rgba(163,230,53,0.08); border: 1px solid rgba(163,230,53,0.2); border-radius: 6px; display: none; text-align: center; }
+  .step-banner { font-size:0.7rem; padding:8px 14px; border-radius:7px; margin-bottom:12px; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.35); color:#fbbf24; letter-spacing:0.02em; line-height:1.5; display:none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>შუაკვეთის <em>მეთოდი</em></h1>
+    <p>ინტერაქტიული დემო — ფესვის პოვნა ნაბიჯ-ნაბიჯ</p>
+  </header>
+
+  <div class="layout">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="canvas-wrap" id="canvasWrap">
+        <div class="canvas-label">f(x) — ფუნქციის გრაფიკი</div>
+        <div class="zoom-controls">
+          <button class="zoom-btn" id="btnZoomIn" title="გადიდება">＋</button>
+          <button class="zoom-btn" id="btnZoomOut" title="დაპატარავება">－</button>
+          <button class="zoom-btn" id="btnZoomFit" title="ინტერვალზე მორგება">მორგება</button>
+          <button class="zoom-btn" id="btnPanToggle" title="გადატანის რეჟიმი">გადატანა</button>
+          <button class="zoom-btn" id="btnZoomBox" title="ჩარჩოთი გადიდება">ჩარჩო</button>
+        </div>
+        <canvas id="plotCanvas"></canvas>
+        <div class="zoom-hint" id="zoomHint"></div>
+      </div>
+
+      <div class="card">
+        <div id="stepBanner" class="step-banner"></div>
+        <div class="card-title">იტერაციების ისტორია</div>
+        <div class="table-wrap">
+          <table id="iterTable">
+            <thead><tr>
+              <th>n</th><th>a</th><th>b</th><th>შუაწერტილი c</th><th>f(c)</th><th>ნიშანი</th><th>|b−a|</th>
+            </tr></thead>
+            <tbody id="iterBody"></tbody>
+          </table>
+        </div>
+        <div class="convergence-msg" id="convMsg"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="card">
+        <div class="card-title">აირჩიე ფუნქცია</div>
+        <div class="func-btns" id="funcBtns">
+          <button class="func-btn active" data-idx="0">x³−x−2</button>
+          <button class="func-btn" data-idx="1">cos(x)−x</button>
+          <button class="func-btn" data-idx="2">x²−4</button>
+          <button class="func-btn" data-idx="3">eˣ−3x</button>
+          <button class="func-btn" data-idx="4">sin(x)</button>
+          <button class="func-btn" id="btnCustomFn" data-idx="custom">საკუთარი…</button>
+        </div>
+        <div class="custom-fn-wrap" id="customFnWrap">
+          <div class="custom-fn-row">
+            <span class="custom-fn-label">f(x) =</span>
+            <input class="custom-fn-input" id="customFnInput" placeholder="მაგ. x^3 - 2*x + 1" spellcheck="false">
+            <button class="custom-fn-apply" id="btnApplyCustom">გამოყენება</button>
+          </div>
+          <div class="fn-parse-err" id="fnParseErr">⚠ არასწორი გამოსახულება — გამოიყენე x, ^, *, sin, cos და სხვ.</div>
+          <div style="font-size:0.63rem;color:var(--muted);line-height:1.6;">
+            მხარდაჭერილია: <code style="color:var(--accent)">x ^ * / + -</code> და<br>
+            <code style="color:var(--accent)">sin cos tan exp log sqrt abs</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">პარამეტრები</div>
+        <div class="fields-row">
+          <div class="field"><label>a (მარცხენა ზღვარი)</label><input type="number" id="inputA" value="1" step="0.1"></div>
+          <div class="field"><label>b (მარჯვენა ზღვარი)</label><input type="number" id="inputB" value="2" step="0.1"></div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>ცდომილების ზღვარი ε</label>
+          <input type="number" id="inputTol" value="0.0001" step="0.00001">
+        </div>
+        <div class="error-msg" id="errorMsg"></div>
+      </div>
+
+      <div class="card" style="padding:12px;">
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btnRun">▶ სრულად გაშვება</button>
+          <button class="btn btn-step" id="btnStep">ნაბიჯი →</button>
+          <button class="btn btn-secondary" id="btnReset">თავიდან</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">მიმდინარე იტერაცია</div>
+        <div class="iter-info">
+          <div class="stat"><div class="stat-label">იტერაცია</div><div class="stat-value cyan" id="statN">—</div></div>
+          <div class="stat"><div class="stat-label">შუაწერტილი c</div><div class="stat-value yellow" id="statC">—</div></div>
+          <div class="stat"><div class="stat-label">f(c)</div><div class="stat-value red" id="statFc">—</div></div>
+          <div class="stat"><div class="stat-label">ინტერვალი |b−a|</div><div class="stat-value green" id="statErr">—</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">ალგორითმი</div>
+        <ul class="steps-list" id="algoSteps">
+          <li class="step-item active" data-step="0"><span class="step-num">1</span><span>შეამოწმე, რომ f(a)·f(b) &lt; 0</span></li>
+          <li class="step-item" data-step="1"><span class="step-num">2</span><span>გამოთვალე შუაწერტილი c = (a+b)/2</span></li>
+          <li class="step-item" data-step="2"><span class="step-num">3</span><span>დაჩრდილე ის ნახევარი, რომელიც აღარ გვჭირდება</span></li>
+          <li class="step-item" data-step="3"><span class="step-num">4</span><span>გადმოიტანე a ან b შუაწერტილზე</span></li>
+          <li class="step-item" data-step="4"><span class="step-num">5</span><span>გაიმეორე, სანამ |b−a| &lt; ε</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const PRESETS = [
+  { label:'x³−x−2',   fn: x => x**3-x-2,          defaultA:1,  defaultB:2   },
+  { label:'cos(x)−x', fn: x => Math.cos(x)-x,      defaultA:0,  defaultB:1   },
+  { label:'x²−4',     fn: x => x**2-4,             defaultA:1,  defaultB:3   },
+  { label:'eˣ−3x',    fn: x => Math.exp(x)-3*x,    defaultA:1,  defaultB:2   },
+  { label:'sin(x)',   fn: x => Math.sin(x),         defaultA:3,  defaultB:3.5 },
+];
+
+let funcIdx = 0;
+let customFn = null;
+let iterations = [], state = null, animTimeout = null;
+let pendingMove = null;
+
+function getF() { return funcIdx === 'custom' ? customFn : PRESETS[funcIdx].fn; }
+function getA() { return parseFloat(document.getElementById('inputA').value); }
+function getB() { return parseFloat(document.getElementById('inputB').value); }
+function getTol() { return parseFloat(document.getElementById('inputTol').value); }
+
+function parseCustomFn(expr) {
+  if (/[^x\d\s\+\-\*\/\^\(\)\.\,a-zA-Z_]/.test(expr)) return null;
+  let e = expr.replace(/\^/g, '**');
+  e = e.replace(/\b(sin|cos|tan|exp|log|sqrt|abs|PI|E)\b/g, 'Math.$1');
+  try {
+    const fn = new Function('x', '"use strict"; return (' + e + ');');
+    fn(1);
+    return fn;
+  } catch { return null; }
+}
+
+let view = { xMin: -1, xMax: 4, yMin: -4, yMax: 4 };
+let panMode = false, boxMode = false;
+let panStart = null, boxStart = null, boxEnd = null, isPanning = false;
+
+function fitView() {
+  const a = getA(), b = getB();
+  const pad = Math.max((b-a)*0.25, 0.02);
+  const f = getF(); if (!f) return;
+  const xMin = a - pad, xMax = b + pad;
+  let yMin = Infinity, yMax = -Infinity;
+  for (let i = 0; i <= 300; i++) {
+    const x = xMin + (i/300)*(xMax-xMin);
+    const y = f(x);
+    if (isFinite(y)) { yMin = Math.min(yMin,y); yMax = Math.max(yMax,y); }
+  }
+  if (!isFinite(yMin) || !isFinite(yMax)) {
+    yMin = -1; yMax = 1;
+  }
+  const span = Math.max(yMax - yMin, 1e-6);
+  const yPad = Math.max(span * 0.2, 0.02);
+  view = { xMin, xMax, yMin: yMin-yPad, yMax: yMax+yPad };
+}
+
+function zoom(factor, cx, cy) {
+  if (cx === undefined) { cx = (view.xMin+view.xMax)/2; cy = (view.yMin+view.yMax)/2; }
+  const xRange = (view.xMax-view.xMin)*factor;
+  const yRange = (view.yMax-view.yMin)*factor;
+  view.xMin = cx - xRange/2;
+  view.xMax = cx + xRange/2;
+  view.yMin = cy - yRange/2;
+  view.yMax = cy + yRange/2;
+}
+
+const canvas = document.getElementById('plotCanvas');
+const ctx = canvas.getContext('2d');
+const hint = document.getElementById('zoomHint');
+let hintTimer = null;
+
+function showHint(msg) {
+  hint.textContent = msg; hint.classList.add('show');
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => hint.classList.remove('show'), 2200);
+}
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = 400 * dpr;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+}
+
+function canvasToData(px, py) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.width/dpr, H = canvas.height/dpr;
+  return {
+    x: view.xMin + (px/W)*(view.xMax-view.xMin),
+    y: view.yMax - (py/H)*(view.yMax-view.yMin)
+  };
+}
+
+function getCanvasXY(e) {
+  const rect = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { px: src.clientX - rect.left, py: src.clientY - rect.top };
+}
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const {px, py} = getCanvasXY(e);
+  const {x, y} = canvasToData(px, py);
+  zoom(e.deltaY > 0 ? 1.15 : 0.87, x, y);
+  drawCurrent();
+}, { passive: false });
+
+canvas.addEventListener('mousedown', e => {
+  const {px,py} = getCanvasXY(e);
+  if (panMode) { panStart = {px,py, xMin:view.xMin, xMax:view.xMax, yMin:view.yMin, yMax:view.yMax}; isPanning = true; }
+  if (boxMode) { boxStart = canvasToData(px,py); boxEnd = null; }
+});
+
+canvas.addEventListener('mousemove', e => {
+  const {px,py} = getCanvasXY(e);
+  if (isPanning && panStart) {
+    const dpr = window.devicePixelRatio||1;
+    const W = canvas.width/dpr, H = canvas.height/dpr;
+    const dx = (px-panStart.px)/W*(panStart.xMax-panStart.xMin);
+    const dy = (py-panStart.py)/H*(panStart.yMax-panStart.yMin);
+    view.xMin = panStart.xMin - dx;
+    view.xMax = panStart.xMax - dx;
+    view.yMin = panStart.yMin + dy;
+    view.yMax = panStart.yMax + dy;
+    drawCurrent();
+  }
+  if (boxMode && boxStart) {
+    boxEnd = canvasToData(px,py);
+    drawCurrent();
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  isPanning = false;
+  if (boxMode && boxStart && boxEnd) {
+    view.xMin = Math.min(boxStart.x, boxEnd.x);
+    view.xMax = Math.max(boxStart.x, boxEnd.x);
+    view.yMin = Math.min(boxStart.y, boxEnd.y);
+    view.yMax = Math.max(boxStart.y, boxEnd.y);
+    boxStart = boxEnd = null;
+    drawCurrent();
+  }
+});
+canvas.addEventListener('mouseleave', () => { isPanning = false; });
+
+document.getElementById('btnZoomIn').addEventListener('click', () => {
+  zoom(0.75); drawCurrent(); showHint('გადიდდა — შეგიძლია მაუსის ბორბალიც გამოიყენო');
+});
+document.getElementById('btnZoomOut').addEventListener('click', () => {
+  zoom(1.35); drawCurrent();
+});
+document.getElementById('btnZoomFit').addEventListener('click', () => {
+  fitView(); drawCurrent(); showHint('ხედვა მოერგო საწყის ინტერვალს');
+});
+document.getElementById('btnPanToggle').addEventListener('click', () => {
+  panMode = !panMode; boxMode = false;
+  document.getElementById('btnPanToggle').classList.toggle('active', panMode);
+  document.getElementById('btnZoomBox').classList.remove('active');
+  canvas.className = panMode ? 'panning' : '';
+  canvas.style.cursor = panMode ? 'grab' : 'crosshair';
+  showHint(panMode ? 'გადატანის რეჟიმი: გადაათრიე გრაფიკი' : 'გადატანის რეჟიმი გამორთულია');
+});
+document.getElementById('btnZoomBox').addEventListener('click', () => {
+  boxMode = !boxMode; panMode = false;
+  document.getElementById('btnZoomBox').classList.toggle('active', boxMode);
+  document.getElementById('btnPanToggle').classList.remove('active');
+  canvas.className = '';
+  canvas.style.cursor = boxMode ? 'crosshair' : 'default';
+  showHint(boxMode ? 'ჩარჩო: მონიშნე სასურველი არე' : 'ჩარჩოს რეჟიმი გამორთულია');
+});
+
+function drawCurrent() {
+  const a = state ? state.a : getA();
+  const b = state ? state.b : getB();
+  const c = pendingMove ? pendingMove.c : (iterations.length ? iterations[iterations.length - 1].c : undefined);
+  drawPlot(a, b, c, pendingMove);
+}
+
+function drawPlot(curA, curB, curC, moveInfo) {
+  const dpr = window.devicePixelRatio||1;
+  const W = canvas.width/dpr, H = canvas.height/dpr;
+  ctx.clearRect(0,0,W,H);
+  const f = getF();
+
+  const toX = x => ((x-view.xMin)/(view.xMax-view.xMin))*W;
+  const toY = y => H - ((y-view.yMin)/(view.yMax-view.yMin))*H;
+
+  ctx.fillStyle = '#111827'; ctx.fillRect(0,0,W,H);
+
+  ctx.strokeStyle = 'rgba(31,45,66,0.8)'; ctx.lineWidth = 1;
+  for (let i=0;i<=8;i++) { const x=(i/8)*W; ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke(); }
+  for (let i=0;i<=6;i++) { const y=(i/6)*H; ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke(); }
+
+  const y0=toY(0), x0=toX(0);
+  ctx.strokeStyle='rgba(100,116,139,0.4)'; ctx.lineWidth=1;
+  if (y0>=0&&y0<=H) { ctx.beginPath();ctx.moveTo(0,y0);ctx.lineTo(W,y0);ctx.stroke(); }
+  if (x0>=0&&x0<=W) { ctx.beginPath();ctx.moveTo(x0,0);ctx.lineTo(x0,H);ctx.stroke(); }
+
+  ctx.font='10px Space Mono,monospace'; ctx.fillStyle='rgba(100,116,139,0.7)';
+  const xStep = niceStep((view.xMax-view.xMin)/6);
+  const xStart = Math.ceil(view.xMin/xStep)*xStep;
+  for (let x=xStart; x<=view.xMax; x+=xStep) {
+    const px=toX(x); if (px<10||px>W-10) continue;
+    ctx.fillText(x.toFixed(Math.max(0,-Math.floor(Math.log10(xStep)))), px-10, Math.min(H-4, Math.max(12, y0+12)));
+  }
+  const yStep = niceStep((view.yMax-view.yMin)/5);
+  const yStart = Math.ceil(view.yMin/yStep)*yStep;
+  for (let y=yStart; y<=view.yMax; y+=yStep) {
+    if (Math.abs(y)<yStep*0.01) continue;
+    const py=toY(y); if (py<10||py>H-10) continue;
+    ctx.fillText(y.toFixed(Math.max(0,-Math.floor(Math.log10(yStep)))), Math.max(4, x0+4), py+4);
+  }
+
+  if (curA!==undefined && curB!==undefined) {
+    ctx.fillStyle='rgba(0,229,255,0.05)';
+    ctx.fillRect(toX(curA),0,toX(curB)-toX(curA),H);
+  }
+
+  if (moveInfo) {
+    const leftX = toX(moveInfo.a);
+    const midX = toX(moveInfo.c);
+    const rightX = toX(moveInfo.b);
+    if (moveInfo.discard === 'left') {
+      ctx.fillStyle='rgba(255,77,109,0.16)';
+      ctx.fillRect(leftX,0,midX-leftX,H);
+    } else if (moveInfo.discard === 'right') {
+      ctx.fillStyle='rgba(255,77,109,0.16)';
+      ctx.fillRect(midX,0,rightX-midX,H);
+    }
+    ctx.fillStyle='rgba(163,230,53,0.10)';
+    if (moveInfo.keep === 'left') {
+      ctx.fillRect(leftX,0,midX-leftX,H);
+    } else if (moveInfo.keep === 'right') {
+      ctx.fillRect(midX,0,rightX-midX,H);
+    }
+  }
+
+  if (curA!==undefined && curB!==undefined) {
+    ctx.setLineDash([4,4]); ctx.lineWidth=1.5;
+    ctx.strokeStyle='rgba(0,229,255,0.55)'; ctx.beginPath();ctx.moveTo(toX(curA),0);ctx.lineTo(toX(curA),H);ctx.stroke();
+    ctx.strokeStyle='rgba(255,77,109,0.55)'; ctx.beginPath();ctx.moveTo(toX(curB),0);ctx.lineTo(toX(curB),H);ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  if (f) {
+    ctx.beginPath(); let started=false;
+    for (let i=0;i<=500;i++) {
+      const x=view.xMin+(i/500)*(view.xMax-view.xMin);
+      const y=f(x);
+      if (!isFinite(y)||Math.abs(y-view.yMin)>3*(view.yMax-view.yMin)) { started=false; continue; }
+      const px=toX(x), py=toY(y);
+      if (!started){ctx.moveTo(px,py);started=true;} else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle='#00e5ff'; ctx.lineWidth=2.5;
+    ctx.shadowColor='rgba(255,255,255,0.25)'; ctx.shadowBlur=8;
+    ctx.stroke(); ctx.shadowBlur=0;
+  }
+
+  if (curC!==undefined && f) {
+    ctx.strokeStyle='#fbbf24'; ctx.lineWidth=2;
+    ctx.shadowColor='rgba(251,191,36,0.5)'; ctx.shadowBlur=10;
+    ctx.beginPath();ctx.moveTo(toX(curC),0);ctx.lineTo(toX(curC),H);ctx.stroke();
+    ctx.shadowBlur=0;
+    const fc=f(curC);
+    if (isFinite(fc)) {
+      ctx.beginPath();ctx.arc(toX(curC),toY(fc),6,0,Math.PI*2);
+      ctx.fillStyle='#fbbf24'; ctx.shadowColor='#fbbf24'; ctx.shadowBlur=16; ctx.fill(); ctx.shadowBlur=0;
+    }
+  }
+
+  if (curA!==undefined && f) {
+    [[curA,'#00e5ff','a'],[curB,'#ff4d6d','b']].forEach(([xv,color,lbl])=>{
+      const fy=f(xv); if(!isFinite(fy)) return;
+      ctx.beginPath();ctx.arc(toX(xv),toY(fy),5,0,Math.PI*2);
+      ctx.fillStyle=color; ctx.shadowColor=color; ctx.shadowBlur=12; ctx.fill(); ctx.shadowBlur=0;
+      ctx.font='bold 11px Space Mono,monospace'; ctx.fillStyle=color;
+      ctx.fillText(lbl, toX(xv)+7, toY(fy)-6);
+    });
+  }
+  if (curC!==undefined) {
+    ctx.font='bold 11px Space Mono,monospace'; ctx.fillStyle='#fbbf24';
+    ctx.fillText('c', toX(curC)+5, toY(0)-6);
+  }
+
+  if (boxMode && boxStart && boxEnd) {
+    const bx=toX(Math.min(boxStart.x,boxEnd.x));
+    const by=toY(Math.max(boxStart.y,boxEnd.y));
+    const bw=Math.abs(toX(boxEnd.x)-toX(boxStart.x));
+    const bh=Math.abs(toY(boxEnd.y)-toY(boxStart.y));
+    ctx.strokeStyle='rgba(0,229,255,0.8)'; ctx.lineWidth=1.5;
+    ctx.setLineDash([4,3]);
+    ctx.strokeRect(bx,by,bw,bh);
+    ctx.fillStyle='rgba(0,229,255,0.05)'; ctx.fillRect(bx,by,bw,bh);
+    ctx.setLineDash([]);
+  }
+}
+
+function niceStep(raw) {
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const norm = raw/mag;
+  if (norm < 1.5) return mag;
+  if (norm < 3.5) return 2*mag;
+  if (norm < 7.5) return 5*mag;
+  return 10*mag;
+}
+
+function initState() { return { a:getA(), b:getB(), tol:getTol(), n:0, done:false }; }
+
+function evaluateMove(st) {
+  const f=getF();
+  const a = st.a;
+  const b = st.b;
+  const fa=f(a);
+  const fb=f(b);
+  const c=(a+b)/2;
+  const fc=f(c);
+  const interval=Math.abs(b-a);
+
+  const info = { n: st.n + 1, a, b, c, fa, fb, fc, interval, converged: false, keep: null, discard: null };
+
+  if (Math.abs(fc) < 1e-14 || interval < st.tol) {
+    info.converged = true;
+    return info;
+  }
+
+  if (fa * fc < 0) {
+    info.keep = 'left';
+    info.discard = 'right';
+  } else if (fc * fb < 0) {
+    info.keep = 'right';
+    info.discard = 'left';
+  } else {
+    info.converged = true;
+  }
+  return info;
+}
+
+function applyMove(st, info) {
+  st.n = info.n;
+  if (info.keep === 'left') st.b = info.c;
+  if (info.keep === 'right') st.a = info.c;
+  if (info.converged) st.done = true;
+  return { n: info.n, a: info.a, b: info.b, c: info.c, fc: info.fc, fa: info.fa, fb: info.fb, interval: info.interval, converged: info.converged, kept: info.keep || 'done' };
+}
+
+function validateInputs() {
+  const f=getF();
+  if (!f) { showErr('სწორი ფუნქცია არ არის არჩეული.'); return false; }
+  const a=getA(), b=getB();
+  if (a>=b) { showErr('აუცილებელია a < b.'); return false; }
+  const fa = f(a), fb = f(b);
+  if (!isFinite(fa) || !isFinite(fb)) { showErr('ფუნქცია არ არის განსაზღვრული a ან b წერტილში.'); return false; }
+  if (fa*fb>=0) { showErr('საჭიროა, რომ f(a) და f(b) სხვადასხვა ნიშნის იყოს.'); return false; }
+  hideErr(); return true;
+}
+function showErr(m){const el=document.getElementById('errorMsg');el.textContent=m;el.style.display='block';}
+function hideErr(){document.getElementById('errorMsg').style.display='none';}
+
+function addTableRow(row) {
+  const tr=document.createElement('tr');
+  if (row.converged) tr.className='converged';
+  else if (iterations.length===1) tr.className='highlight';
+  const sign=row.fc>=0?'<span class="tag tag-pos">+</span>':'<span class="tag tag-neg">−</span>';
+  tr.innerHTML='<td>'+row.n+'</td><td>'+row.a.toFixed(6)+'</td><td>'+row.b.toFixed(6)+'</td><td><strong>'+row.c.toFixed(6)+'</strong></td><td>'+row.fc.toFixed(6)+'</td><td>'+sign+'</td><td>'+row.interval.toFixed(6)+'</td>';
+  document.getElementById('iterBody').appendChild(tr);
+  tr.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function updateStats(row) {
+  document.getElementById('statN').textContent=row.n;
+  document.getElementById('statC').textContent=row.c.toFixed(6);
+  document.getElementById('statFc').textContent=row.fc.toFixed(6);
+  document.getElementById('statErr').textContent=row.interval.toFixed(6);
+}
+function highlightAlgoStep(s){document.querySelectorAll('.step-item').forEach((el,i)=>el.classList.toggle('active',i===s));}
+
+function reset() {
+  clearTimeout(animTimeout);
+  iterations=[]; state=null; pendingMove=null;
+  clearStepBanner();
+  document.getElementById('iterBody').innerHTML='';
+  document.getElementById('convMsg').style.display='none';
+  hideErr();
+  ['statN','statC','statFc','statErr'].forEach(id=>document.getElementById(id).textContent='—');
+  highlightAlgoStep(0);
+  fitView();
+  drawPlot(getA(), getB(), undefined, null);
+}
+
+function doStep() {
+  if (!state) {
+    if (!validateInputs()) return;
+    state = initState();
+    pendingMove = null;
+  }
+  if (state.done) return;
+
+  const info = evaluateMove(state);
+  pendingMove = info;
+  drawPlot(state.a, state.b, info.c, info);
+  highlightAlgoStep(2);
+
+  if (info.converged) {
+    const row = applyMove(state, info);
+    iterations.push(row);
+    addTableRow(row);
+    updateStats(row);
+    highlightAlgoStep(4);
+    setStepBanner('შუაწერტილი მოიძებნა: c = ' + info.c.toFixed(6) + '. პროცესი დასრულდა.');
+    pendingMove = null;
+    drawPlot(state.a, state.b, info.c, null);
+    const m=document.getElementById('convMsg');
+    m.textContent='✓ პროცესი დასრულდა! ფესვი დაახლოებით არის ' + row.c.toFixed(8) + ', იტერაციები: ' + row.n;
+    m.style.display='block';
+    return;
+  }
+
+  const bannerText = info.keep === 'left'
+    ? 'შუაწერტილი c = ' + info.c.toFixed(6) + '. მარჯვენა ნახევარი გამოირიცხა, ამიტომ b გადმოდის c-ზე.'
+    : 'შუაწერტილი c = ' + info.c.toFixed(6) + '. მარცხენა ნახევარი გამოირიცხა, ამიტომ a გადმოდის c-ზე.';
+  setStepBanner(bannerText);
+
+  setTimeout(() => {
+    if (!state || state.done) return;
+    const row = applyMove(state, info);
+    iterations.push(row);
+    addTableRow(row);
+    updateStats(row);
+    highlightAlgoStep(3);
+    pendingMove = null;
+    drawPlot(state.a, state.b, row.c, null);
+
+    if (row.converged || Math.abs(state.b - state.a) < state.tol) {
+      state.done = true;
+      highlightAlgoStep(4);
+      const m=document.getElementById('convMsg');
+      m.textContent='✓ პროცესი დასრულდა! ფესვი დაახლოებით არის ' + row.c.toFixed(8) + ', იტერაციები: ' + row.n;
+      m.style.display='block';
+    }
+  }, 550);
+}
+
+function setStepBanner(msg) {
+  const el = document.getElementById('stepBanner');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function clearStepBanner() {
+  const el = document.getElementById('stepBanner');
+  el.style.display = 'none';
+}
+
+function runAll() {
+  if (!validateInputs()) return;
+  reset();
+  state=initState();
+  let steps=0;
+  function tick() {
+    if (!state || state.done || steps>=100) return;
+    doStep();
+    steps++;
+    if (!state.done) animTimeout=setTimeout(tick,800);
+  }
+  tick();
+}
+
+document.getElementById('btnStep').addEventListener('click', doStep);
+document.getElementById('btnRun').addEventListener('click', runAll);
+document.getElementById('btnReset').addEventListener('click', reset);
+
+document.querySelectorAll('.func-btn[data-idx]').forEach(btn => {
+  if (btn.id==='btnCustomFn') return;
+  btn.addEventListener('click', () => {
+    funcIdx=parseInt(btn.dataset.idx);
+    document.querySelectorAll('.func-btn').forEach(b=>b.classList.remove('active','custom-active'));
+    btn.classList.add('active');
+    document.getElementById('customFnWrap').classList.remove('visible');
+    const fn=PRESETS[funcIdx];
+    document.getElementById('inputA').value=fn.defaultA;
+    document.getElementById('inputB').value=fn.defaultB;
+    reset();
+  });
+});
+
+document.getElementById('btnCustomFn').addEventListener('click', () => {
+  const wrap=document.getElementById('customFnWrap');
+  wrap.classList.toggle('visible');
+  document.querySelectorAll('.func-btn').forEach(b=>b.classList.remove('active','custom-active'));
+  document.getElementById('btnCustomFn').classList.add('custom-active');
+});
+
+document.getElementById('btnApplyCustom').addEventListener('click', applyCustom);
+document.getElementById('customFnInput').addEventListener('keydown', e => { if (e.key==='Enter') applyCustom(); });
+
+function applyCustom() {
+  const expr=document.getElementById('customFnInput').value.trim();
+  const errEl=document.getElementById('fnParseErr');
+  const fn=parseCustomFn(expr);
+  if (!fn) { errEl.style.display='block'; return; }
+  errEl.style.display='none';
+  customFn=fn; funcIdx='custom';
+  reset();
+  showHint('საკუთარი ფუნქცია გამოყენებულია');
+}
+
+['inputA','inputB','inputTol'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => { reset(); });
+});
+
+window.addEventListener('resize', () => { resizeCanvas(); drawCurrent(); });
+resizeCanvas();
+fitView();
+drawPlot(getA(), getB(), undefined, null);
+showHint('გრაფიკზე შეგიძლია გადიდება, გადატანა და ჩარჩოთი მონიშვნა');
+</script>
+</body>
+</html>
