@@ -13,7 +13,7 @@
 
 ### ლექცია 21/22 — იმპულსური მახასიათებელი, ტრანსფერ ფუნქცია
 
-- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1EGLWPlQHYVP_yHGhMLyhRIDFhxoFr_DM/view?usp=drive_link)
+- 🖥️ [ლექციის სქრინი](https://drive.google.com/file/d/1klAQe39OdeB-yppQiVVNwQAlJ1bAI60L/view?usp=drive_link)
 - 📝 დავალება: წიგნიდან [1] — Fundamentals of Differential Equations. ლაპლასის გარდაქმნა: თავები 7.8, 7.9, 7.10.
   - თავი 7.8: 3, 4, 29, 30, 31, 32;
   - თავი 7.9: 7, 9, 11, 18, 19, 20, 29, 30, 35;
